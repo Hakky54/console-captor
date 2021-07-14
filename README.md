@@ -67,12 +67,7 @@ See the unit test [ConsoleCaptorShould](src/test/java/nl/altindag/console/Consol
 # Usage
 ##### Capture console output
 ```java
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 public class FooService {
-
-    private static final Logger LOGGER = LogManager.getLogger(FooService.class);
 
     public void sayHello() {
         System.out.println("Keyboard not responding. Press any key to continue...");
