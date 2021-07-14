@@ -50,7 +50,9 @@ libraryDependencies += "io.github.hakky54" % "consolecaptor" % "1.0.0" % Test
 # Introduction
 Hey, hello there 👋 Welcome, you are ![visitors](https://visitor-badge.glitch.me/badge?page_id=https://github.com/Hakky54/console-captor) I hope you will like this library ❤️
 
-ConsoleCaptor is a library which will enable you to easily capture the output of the console for unit testing purposes. Want to capture logs? You might want to give [LogCaptor](https://github.com/Hakky54/log-captor) a try.
+ConsoleCaptor is a library which will enable you to easily capture the output of the console for unit testing purposes.
+
+Do you want to capture logs? Please have a look at [LogCaptor](https://github.com/Hakky54/log-captor).
 
 ### Advantages
 - No mocking required
