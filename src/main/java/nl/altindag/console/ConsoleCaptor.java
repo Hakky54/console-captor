@@ -64,7 +64,8 @@ public final class ConsoleCaptor implements AutoCloseable {
 
     private List<String> getContent(ByteArrayOutputStream outputStream) {
         return Stream.of(outputStream.toString().split(System.lineSeparator()))
-                .filter(StringUtils::isNotBlank)
+                .map(String::trim)
+                .filter(line -> !line.isEmpty())
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
@@ -110,24 +111,6 @@ public final class ConsoleCaptor implements AutoCloseable {
     private void rollBackConfiguration() {
         System.setOut(originalOut);
         System.setErr(originalErr);
-    }
-
-    private static final class StringUtils {
-
-        private StringUtils() {}
-
-        private static boolean isNotBlank(CharSequence charSequence) {
-            int length = isNull(charSequence) ? 0 : charSequence.length();
-            if (length != 0) {
-                for (int i = 0; i < length; ++i) {
-                    if (!Character.isWhitespace(charSequence.charAt(i))) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
     }
 
 }
