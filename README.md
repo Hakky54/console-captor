@@ -15,7 +15,7 @@
 # ConsoleCaptor
 
 # Install library with:
-### Install with [maven](https://mvnrepository.com/artifact/io.github.hakky54/logcaptor)
+### Install with [maven](https://mvnrepository.com/artifact/io.github.hakky54/consolecaptor)
 ```xml
 <dependency>
     <groupId>io.github.hakky54</groupId>
