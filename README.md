@@ -119,7 +119,7 @@ public class FooServiceShould {
     private static ConsoleCaptor consoleCaptor;
     
     @BeforeAll
-    public static setupLogCaptor() {
+    public static setupConsoleCaptor() {
         consoleCaptor = new ConsoleCaptor();
     }
 
