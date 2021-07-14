@@ -121,7 +121,7 @@ public class FooServiceShould {
     }
 
     @AfterEach
-    public void clearLogs() {
+    public void clearOutput() {
         consoleCaptor.clearOutput();
     }
     
