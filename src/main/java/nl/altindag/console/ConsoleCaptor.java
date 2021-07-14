@@ -48,6 +48,14 @@ public final class ConsoleCaptor implements AutoCloseable {
         System.setErr(consoleCaptorForErr);
     }
 
+    private void createStreams() {
+        outputStreamForOut = new ByteArrayOutputStream();
+        outputStreamForErr = new ByteArrayOutputStream();
+
+        consoleCaptorForOut = new PrintStream(outputStreamForOut);
+        consoleCaptorForErr = new PrintStream(outputStreamForErr);
+    }
+
     public List<String> getStandardOutput() {
         return getContent(outputStreamForOut);
     }
@@ -71,12 +79,6 @@ public final class ConsoleCaptor implements AutoCloseable {
         createStreams();
     }
 
-    @Override
-    public void close() {
-        rollBackConfiguration();
-        closeExistingStreams();
-    }
-
     private void closeExistingStreams() {
         try {
             outputStreamForOut.flush();
@@ -94,12 +96,10 @@ public final class ConsoleCaptor implements AutoCloseable {
         }
     }
 
-    private void createStreams() {
-        outputStreamForOut = new ByteArrayOutputStream();
-        outputStreamForErr = new ByteArrayOutputStream();
-
-        consoleCaptorForOut = new PrintStream(outputStreamForOut);
-        consoleCaptorForErr = new PrintStream(outputStreamForErr);
+    @Override
+    public void close() {
+        rollBackConfiguration();
+        closeExistingStreams();
     }
 
     private void rollBackConfiguration() {
