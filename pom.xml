@@ -7,7 +7,7 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <name>console-captor</name>
-    <description>ConsoleCaptor will enable you to easily capture console entries for unit testing purposes</description>
+    <description>ConsoleCaptor will enable you to easily capture console output for unit testing purposes</description>
     <url>https://github.com/Hakky54/console-captor</url>
 
     <licenses>
