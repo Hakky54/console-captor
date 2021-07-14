@@ -40,7 +40,7 @@ libraryDependencies += "io.github.hakky54" % "consolecaptor" % "1.0.0" % Test
 ## Table of contents
 1. [Introduction](#introduction)
     - [Advantages](#advantages)
-    - [Supported Java versions](#tested-java-versions)
+    - [Tested Java versions](#tested-java-versions)
 2. [Usage](#usage)
     - [Capture Console Output](#capture-console-output)
     - [Reuse ConsoleCaptor for multiple tests](#initialize-consolecaptor-once-and-reuse-it-during-multiple-tests-with-clearoutput-method-within-the-aftereach-method)
