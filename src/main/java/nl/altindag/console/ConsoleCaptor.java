@@ -30,8 +30,8 @@ import java.util.stream.Stream;
  */
 public final class ConsoleCaptor implements AutoCloseable {
 
-    private final PrintStream originalOut;
-    private final PrintStream originalErr;
+    private static final PrintStream originalOut = System.out;
+    private static final PrintStream originalErr = System.err;
 
     private ByteArrayOutputStream outputStreamForOut;
     private ByteArrayOutputStream outputStreamForErr;
@@ -39,9 +39,6 @@ public final class ConsoleCaptor implements AutoCloseable {
     private PrintStream consoleCaptorForErr;
 
     public ConsoleCaptor() {
-        originalOut = System.out;
-        originalErr = System.err;
-
         createStreams();
 
         System.setOut(consoleCaptorForOut);
