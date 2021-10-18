@@ -36,8 +36,41 @@ class ConsoleCaptorShould {
             List<String> standardOutput = consoleCaptor.getStandardOutput();
             List<String> errorOutput = consoleCaptor.getErrorOutput();
 
-            assertThat(standardOutput).contains("Hello there friend!", "How are you doing?");
-            assertThat(errorOutput).contains("Congratulations, you are pregnant!", "It's a boy!");
+            assertThat(standardOutput)
+                    .hasSize(2)
+                    .contains("Hello there friend!", "How are you doing?");
+            assertThat(errorOutput)
+                    .hasSize(2)
+                    .contains("Congratulations, you are pregnant!", "It's a boy!");
+        }
+    }
+
+    @Test
+    void clearAndRecaptureOutStatementsWhenClearOutputIsCalled() {
+        try (ConsoleCaptor consoleCaptor = new ConsoleCaptor()) {
+            FooService fooService = new FooService();
+            fooService.sayHello();
+
+            assertThat(consoleCaptor.getStandardOutput())
+                    .hasSize(2)
+                    .contains("Hello there friend!", "How are you doing?");
+            assertThat(consoleCaptor.getErrorOutput())
+                    .hasSize(2)
+                    .contains("Congratulations, you are pregnant!", "It's a boy!");
+
+            consoleCaptor.clearOutput();
+
+            assertThat(consoleCaptor.getStandardOutput()).isEmpty();
+            assertThat(consoleCaptor.getErrorOutput()).isEmpty();
+
+            fooService.sayHello();
+
+            assertThat(consoleCaptor.getStandardOutput())
+                    .hasSize(2)
+                    .contains("Hello there friend!", "How are you doing?");
+            assertThat(consoleCaptor.getErrorOutput())
+                    .hasSize(2)
+                    .contains("Congratulations, you are pregnant!", "It's a boy!");
         }
     }
 
