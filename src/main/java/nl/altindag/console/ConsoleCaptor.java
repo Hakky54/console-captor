@@ -40,9 +40,7 @@ public final class ConsoleCaptor implements AutoCloseable {
 
     public ConsoleCaptor() {
         createStreams();
-
-        System.setOut(consoleCaptorForOut);
-        System.setErr(consoleCaptorForErr);
+        insertStreamsToSystemOut();
     }
 
     private void createStreams() {
@@ -51,6 +49,11 @@ public final class ConsoleCaptor implements AutoCloseable {
 
         consoleCaptorForOut = new PrintStream(outputStreamForOut);
         consoleCaptorForErr = new PrintStream(outputStreamForErr);
+    }
+
+    private void insertStreamsToSystemOut() {
+        System.setOut(consoleCaptorForOut);
+        System.setErr(consoleCaptorForErr);
     }
 
     public List<String> getStandardOutput() {
@@ -74,6 +77,7 @@ public final class ConsoleCaptor implements AutoCloseable {
     public void clearOutput() {
         closeExistingStreams();
         createStreams();
+        insertStreamsToSystemOut();
     }
 
     private void closeExistingStreams() {
