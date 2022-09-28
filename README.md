@@ -116,7 +116,7 @@ public class FooServiceShould {
     private static ConsoleCaptor consoleCaptor;
     
     @BeforeAll
-    public static setupConsoleCaptor() {
+    public static void setupConsoleCaptor() {
         consoleCaptor = new ConsoleCaptor();
     }
 
