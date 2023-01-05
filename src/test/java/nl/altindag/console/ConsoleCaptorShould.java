@@ -93,12 +93,59 @@ class ConsoleCaptorShould {
         }
     }
 
+    @Test
+    void captureOutStatementsWithWhiteSpace() {
+        try (ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).build()) {
+            FooService fooService = new FooService();
+            fooService.sayHello();
+
+            List<String> standardOutput = consoleCaptor.getStandardOutput();
+            List<String> errorOutput = consoleCaptor.getErrorOutput();
+
+            assertThat(standardOutput)
+                    .hasSize(2)
+                    .contains("  Hello there friend!", "How are you doing?  ");
+            assertThat(errorOutput)
+                    .hasSize(2)
+                    .contains("Congratulations, you are pregnant!", "It's a boy!");
+        }
+    }
+
+    @Test
+    void captureOutStatementsWithEmptyLines() {
+        try (ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowEmptyLines(true).build()) {
+            FooService fooService = new FooService();
+            fooService.sayHello();
+
+            assertThat(consoleCaptor.getStandardOutput())
+                    .hasSize(3)
+                    .contains("Hello there friend!", "", "How are you doing?");
+            assertThat(consoleCaptor.getErrorOutput())
+                    .hasSize(2)
+                    .contains("Congratulations, you are pregnant!", "It's a boy!");
+
+            consoleCaptor.clearOutput();
+
+            assertThat(consoleCaptor.getStandardOutput()).hasSize(1).contains("");
+            assertThat(consoleCaptor.getErrorOutput()).hasSize(1).contains("");
+
+            fooService.sayHello();
+
+            assertThat(consoleCaptor.getStandardOutput())
+                    .hasSize(3)
+                    .contains("Hello there friend!", "", "How are you doing?");
+            assertThat(consoleCaptor.getErrorOutput())
+                    .hasSize(2)
+                    .contains("Congratulations, you are pregnant!", "It's a boy!");
+        }
+    }
 
     static class FooService {
 
         public void sayHello() {
-            System.out.println("Hello there friend!");
-            System.out.println("How are you doing?");
+            System.out.println("  Hello there friend!");
+            System.out.println("");
+            System.out.println("How are you doing?  ");
 
             System.err.println("Congratulations, you are pregnant!");
             System.err.println("It's a boy!");

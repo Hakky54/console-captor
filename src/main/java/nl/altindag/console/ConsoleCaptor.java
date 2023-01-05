@@ -38,9 +38,19 @@ public final class ConsoleCaptor implements AutoCloseable {
     private PrintStream consoleCaptorForOut;
     private PrintStream consoleCaptorForErr;
 
+    private final boolean allowEmptyLines;
+    private final boolean allowTrimmingWhiteSpace;
+
     public ConsoleCaptor() {
+        this(false, true);
+    }
+
+    private ConsoleCaptor(boolean allowEmptyLines, boolean allowTrimmingWhiteSpace) {
         createStreams();
         insertStreamsToSystemOut();
+
+        this.allowEmptyLines = allowEmptyLines;
+        this.allowTrimmingWhiteSpace = allowTrimmingWhiteSpace;
     }
 
     private void createStreams() {
@@ -66,8 +76,8 @@ public final class ConsoleCaptor implements AutoCloseable {
 
     private List<String> getContent(ByteArrayOutputStream outputStream) {
         return Stream.of(outputStream.toString().split(System.lineSeparator()))
-                .map(String::trim)
-                .filter(line -> !line.isEmpty())
+                .map(line -> allowTrimmingWhiteSpace ? line.trim() : line)
+                .filter(line -> allowEmptyLines || !line.isEmpty())
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
@@ -106,6 +116,33 @@ public final class ConsoleCaptor implements AutoCloseable {
     private void rollBackConfiguration() {
         System.setOut(originalOut);
         System.setErr(originalErr);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private boolean allowEmptyLines = false;
+        private boolean allowTrimmingWhiteSpace = true;
+
+        private Builder() {}
+
+        public Builder allowEmptyLines(boolean allowEmptyLines) {
+            this.allowEmptyLines = allowEmptyLines;
+            return this;
+        }
+
+        public Builder allowTrimmingWhiteSpace(boolean allowTrimmingWhiteSpace) {
+            this.allowTrimmingWhiteSpace = allowTrimmingWhiteSpace;
+            return this;
+        }
+
+        public ConsoleCaptor build() {
+            return new ConsoleCaptor(allowEmptyLines, allowTrimmingWhiteSpace);
+        }
+
     }
 
 }
