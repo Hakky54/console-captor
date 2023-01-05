@@ -20,21 +20,21 @@
 <dependency>
     <groupId>io.github.hakky54</groupId>
     <artifactId>consolecaptor</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <scope>test</scope>
 </dependency>
 ```
 ### Install with Gradle
 ```groovy
-testImplementation 'io.github.hakky54:consolecaptor:1.0.2'
+testImplementation 'io.github.hakky54:consolecaptor:1.0.3'
 ```
 ### Install with Scala SBT
 ```
-libraryDependencies += "io.github.hakky54" % "consolecaptor" % "1.0.2" % Test
+libraryDependencies += "io.github.hakky54" % "consolecaptor" % "1.0.3" % Test
 ```
 ### Install with Apache Ivy
 ```xml
-<dependency org="io.github.hakky54" name="consolecaptor" rev="1.0.2" />
+<dependency org="io.github.hakky54" name="consolecaptor" rev="1.0.3" />
 ```
 
 ## Table of contents
