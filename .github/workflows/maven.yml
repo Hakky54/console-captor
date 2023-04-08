@@ -1,32 +1,37 @@
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
-  build-with-jdk-8:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        java: [ '8', '11', '17' ]
 
-      - name: Set up JDK 8
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '8'
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          java-version: ${{ matrix.java }}
+          cache: 'maven'
 
       - name: Build and test
         run: mvn clean verify --no-transfer-progress
 
-  build-with-jdk-11:
+  code-quality-scan:
+    if: ${{ (github.actor == 'Hakky54') }}
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v1
 
@@ -35,21 +40,9 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: 'maven'
 
       - name: Build, test and quality scan
-        run: mvn clean verify --no-transfer-progress sonar:sonar -Dsonar.organization=hakky54 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn clean verify sonar:sonar -Dsonar.organization=hakky54 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --no-transfer-progress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: github.actor == 'Hakky54'
-
-      - name: Build and test
-        run: mvn clean verify --no-transfer-progress
-        if: github.actor != 'Hakky54'
