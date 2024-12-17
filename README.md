@@ -158,6 +158,7 @@ public class FooServiceShould {
 There are plenty of ways to contribute to this project:
 
 * Give it a star
+* Make a donation through [GitHub](https://github.com/sponsors/Hakky54) or [open collective](https://opencollective.com/hakky54)
 * Join the [Gitter room](https://gitter.im/hakky54/consolecaptor) and leave a feedback or help with answering users questions
 * Submit a PR
 
