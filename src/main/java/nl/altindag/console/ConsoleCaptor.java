@@ -19,6 +19,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UncheckedIOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,25 +42,31 @@ public final class ConsoleCaptor implements AutoCloseable {
 
     private final boolean allowEmptyLines;
     private final boolean allowTrimmingWhiteSpace;
+    private final Charset charSet;
 
     public ConsoleCaptor() {
-        this(false, true);
+        this(false, true, StandardCharsets.UTF_8);
     }
 
-    private ConsoleCaptor(boolean allowEmptyLines, boolean allowTrimmingWhiteSpace) {
-        createStreams();
-        insertStreamsToSystemOut();
-
+    private ConsoleCaptor(boolean allowEmptyLines, boolean allowTrimmingWhiteSpace, Charset charSet) {
+        this.charSet = charSet;
         this.allowEmptyLines = allowEmptyLines;
         this.allowTrimmingWhiteSpace = allowTrimmingWhiteSpace;
+
+        createStreams();
+        insertStreamsToSystemOut();
     }
 
     private void createStreams() {
         outputStreamForOut = new ByteArrayOutputStream();
         outputStreamForErr = new ByteArrayOutputStream();
 
-        consoleCaptorForOut = new PrintStream(outputStreamForOut);
-        consoleCaptorForErr = new PrintStream(outputStreamForErr);
+        try {
+            consoleCaptorForOut = new PrintStream(outputStreamForOut, true, charSet.name());
+            consoleCaptorForErr = new PrintStream(outputStreamForErr, true, charSet.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     private void insertStreamsToSystemOut() {
@@ -125,6 +134,7 @@ public final class ConsoleCaptor implements AutoCloseable {
 
         private boolean allowEmptyLines = false;
         private boolean allowTrimmingWhiteSpace = true;
+        private Charset charSet = StandardCharsets.UTF_8;
 
         private Builder() {}
 
@@ -138,8 +148,13 @@ public final class ConsoleCaptor implements AutoCloseable {
             return this;
         }
 
+        public Builder withEncoding(Charset charSet) {
+            this.charSet = charSet;
+            return this;
+        }
+
         public ConsoleCaptor build() {
-            return new ConsoleCaptor(allowEmptyLines, allowTrimmingWhiteSpace);
+            return new ConsoleCaptor(allowEmptyLines, allowTrimmingWhiteSpace, charSet);
         }
 
     }

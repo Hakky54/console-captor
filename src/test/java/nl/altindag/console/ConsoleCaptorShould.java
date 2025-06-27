@@ -17,6 +17,7 @@ package nl.altindag.console;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -136,6 +137,23 @@ class ConsoleCaptorShould {
             assertThat(consoleCaptor.getErrorOutput())
                     .hasSize(2)
                     .contains("Congratulations, you are pregnant!", "It's a boy!");
+        }
+    }
+
+    @Test
+    void captureOutStatementsWithCustomCharacterEncoding() {
+        try (ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().withEncoding(StandardCharsets.UTF_8).build()) {
+            FooService fooService = new FooService();
+            fooService.sayHello();
+
+            assertThat(consoleCaptor.getStandardOutput())
+                    .hasSize(2)
+                    .contains("Hello there friend!", "How are you doing?");
+            assertThat(consoleCaptor.getErrorOutput())
+                    .hasSize(2)
+                    .contains("Congratulations, you are pregnant!", "It's a boy!");
+
+            consoleCaptor.clearOutput();
         }
     }
 
