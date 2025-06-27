@@ -153,6 +153,16 @@ public class FooServiceShould {
 }
 ```
 
+##### Customise ConsoleCapture
+It is possible to adjust the console captures behaviour with the builder pattern as shown below
+```java
+ConsoleCaptor consoleCaptor = ConsoleCaptor.builder()
+        .allowEmptyLines(true)
+        .allowTrimmingWhiteSpace(false)
+        .withEncoding(StandardCharsets.UTF_16)
+        .build();
+```
+
 # Contributing
 
 There are plenty of ways to contribute to this project:
