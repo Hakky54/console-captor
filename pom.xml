@@ -37,32 +37,20 @@
         </developer>
     </developers>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
-        <version.java>1.8</version.java>
-        <version.junit>5.7.2</version.junit>
-        <version.assertj>3.19.0</version.assertj>
+        <version.junit>5.13.3</version.junit>
+        <version.assertj>3.27.3</version.assertj>
         <version.jacoco-maven-plugin>0.8.5</version.jacoco-maven-plugin>
-        <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
-        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
-        <version.maven-jar-plugin>3.2.0</version.maven-jar-plugin>
-        <version.maven-javadoc-plugin>3.1.1</version.maven-javadoc-plugin>
-        <version.maven-source-plugin>3.2.1</version.maven-source-plugin>
-        <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
-        <version.maven-release-plugin>2.5.3</version.maven-release-plugin>
+        <version.maven-surefire-plugin>3.5.3</version.maven-surefire-plugin>
+        <version.maven-compiler-plugin>3.14.0</version.maven-compiler-plugin>
+        <version.maven-jar-plugin>3.4.2</version.maven-jar-plugin>
+        <version.maven-javadoc-plugin>3.11.2</version.maven-javadoc-plugin>
+        <version.maven-source-plugin>3.3.1</version.maven-source-plugin>
+        <version.maven-gpg-plugin>3.2.8</version.maven-gpg-plugin>
+        <version.maven-release-plugin>3.1.1</version.maven-release-plugin>
         <version.maven-scm-publish-plugin>3.0.0</version.maven-scm-publish-plugin>
-        <version.nexus-staging-maven-plugin>1.6.8</version.nexus-staging-maven-plugin>
-        <version.license-maven-plugin>4.5</version.license-maven-plugin>
+        <version.nexus-staging-maven-plugin>1.7.0</version.nexus-staging-maven-plugin>
+        <version.license-maven-plugin>4.6</version.license-maven-plugin>
         <license.git.copyrightYears>2021</license.git.copyrightYears>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -94,9 +82,28 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${version.maven-compiler-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                    </execution>
+                    <execution>
+                        <id>java8-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <!-- recompile everything with Java 8 except the module-info.java -->
+                        <configuration>
+                            <release>8</release>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
-                    <source>${version.java}</source>
-                    <target>${version.java}</target>
+                    <release>11</release>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
 
@@ -138,6 +145,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
                 <configuration>
+                    <useModulePath>false</useModulePath>
                     <includes>
                         <include>%regex[.*Should.*]</include>
                     </includes>
@@ -192,7 +200,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <nexusUrl>https://ossrh-staging-api.central.sonatype.com</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
